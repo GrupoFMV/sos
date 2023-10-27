@@ -65,7 +65,7 @@ function buscarOrdensDirecionadas($conn, $dataAtualFormat)
     //     JOIN os_tipos ON os.os_tipo = os_tipos.os_tipo_id
     //     JOIN os_status ON os.os_status = os_status.os_status_id
     //     WHERE os.dia_finalizado = '$dataFiltro';
-        
+
     //     "; 
     // } else {
     //     echo "<script>console.log('meu');</script>";
@@ -84,7 +84,7 @@ function buscarOrdensDirecionadas($conn, $dataAtualFormat)
     JOIN os_status ON chamado_status = os_status.os_status_id
     JOIN os_tipos ON chamado_tipo = os_tipos.os_tipo_id
     WHERE DATE(chamado_data_referencia) = '$dataAtualFormat'
-    "; 
+    ";
 
 
     $result0 = mysqli_query($conn, $query0);
@@ -97,9 +97,7 @@ function buscarOrdensDirecionadas($conn, $dataAtualFormat)
         $data0[] = $row;
     }
 
-    $resultadoJsonOrdens = json_encode($data0);
 
-    // echo "<script>console.log('osss resultadoJsonOrdens',$resultadoJsonOrdens);</script>";
 
     // $query1 = '';   
 
@@ -111,7 +109,7 @@ function buscarOrdensDirecionadas($conn, $dataAtualFormat)
     //     JOIN os_tipos ON os.os_tipo = os_tipos.os_tipo_id
     //     JOIN os_status ON os.os_status = os_status.os_status_id
     //     WHERE os.dia_finalizado = '$dataFiltro';
-        
+
     //     "; 
     // } else {
     //      $query1 = "SELECT os.*, clientes.cliente_fantasia, os_tipos.os_tipo_nome, os_tipos.os_tipos_tempo, os_status.os_status_nome
@@ -219,16 +217,20 @@ function buscarOrdensDirecionadas($conn, $dataAtualFormat)
         if ($tecnicoIndex !== false) {
             array_push($OsPorTecnico[$tecnicoIndex]['ordens'], $order);
         } else {
-            array_push($OsPorTecnico, array(
-                'idTecnico' => $technician['idTecnico'],
-                'ordens' => array($order)
-            ));
+            array_push(
+                $OsPorTecnico,
+                array(
+                    'idTecnico' => $technician['idTecnico'],
+                    'ordens' => array($order)
+                )
+            );
         }
     }
 
     $teste = gerarHoraInicio($OsPorTecnico);
     $resultadoFinal = json_encode($teste);
-    
+
+
     echo "<script>console.log('osss resultadoJsonOrdens',$resultadoFinal);</script>";
 
     return $resultadoFinal;
@@ -251,10 +253,6 @@ function buscarUsers($conn)
         );
     }
 
-   $resultadoJsonOrdens = json_encode($data1);
-
-    echo "<script>console.log('testestestes',$resultadoJsonOrdens);</script>";
-    
     $resultadoJson = json_encode($data1);
     return $resultadoJson;
 }
@@ -313,7 +311,7 @@ function convertIsoStringToJsDate($isoString, $timezone = 'America/Sao_Paulo', $
     return $formattedDate . ' (' . $timezoneName . ')';
 }
 
-function verifyOrdemAnterior($horaOrdemAnterior, $horaOrdemAtual) 
+function verifyOrdemAnterior($horaOrdemAnterior, $horaOrdemAtual)
 {
     $datetime1 = new DateTime($horaOrdemAnterior);
     $datetime2 = new DateTime($horaOrdemAtual);
@@ -324,7 +322,8 @@ function verifyOrdemAnterior($horaOrdemAnterior, $horaOrdemAtual)
     }
 }
 
-function add_minute($time) {
+function add_minute($time)
+{
     $datetime = new DateTime($time);
     $datetime->modify('+1 minute');
     return $datetime->format('Y-m-d H:i:s');
@@ -338,7 +337,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         usort($ordensDoTecnico, function ($a, $b) {
             $timeA = strtotime($a['chamado_hora_inicial_esperada'] ?: $a['evento_inicio']);
             $timeB = strtotime($b['chamado_hora_inicial_esperada'] ?: $b['evento_inicio']);
-        
+
             return $timeA - $timeB;
         });
 
@@ -360,7 +359,6 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                         $ordem['start'] = $ordem['chamado_hora_inicial_esperada'];
                         $ordem['end'] = addMinutesToTime($ordem['start'], intval($ordem['os_tipos_tempo']));
                     }
-                   
                 }
                 $ordem['start'] = getCurrentTime();
                 $ordem['end'] = addMinutesToTime($ordem['start'], intval($ordem['os_tipos_tempo']));
@@ -370,7 +368,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
 
             if (compareCurrentTime($ordem['chamado_hora_inicial_esperada']) == 0 && $ordem['os_status_nome'] == "Direcionado") {
                 if ($i === 0) {
-                    $ordem['start'] =  $ordem['chamado_hora_inicial_esperada'];
+                    $ordem['start'] = $ordem['chamado_hora_inicial_esperada'];
                     $ordem['end'] = addMinutesToTime($ordem['start'], intval($ordem['os_tipos_tempo']));
                 } else {
                     $ordemAnterior = $ordensDoTecnico[$i - 1];
@@ -383,7 +381,6 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                         $ordem['start'] = $ordem['chamado_hora_inicial_esperada'];
                         $ordem['end'] = addMinutesToTime($ordem['start'], intval($ordem['os_tipos_tempo']));
                     }
-                   
                 }
 
                 $ordensAlteradas[] = $ordem;
@@ -438,13 +435,18 @@ function gerarHoraInicio($OsPorTecnicoFunction)
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/eec0e0d660.js" crossorigin="anonymous"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/solid.css" integrity="sha384-wnAC7ln+XN0UKdcPvJvtqIH3jOjs9pnKnq9qX68ImXvOGz2JuFoEiCjT8jyZQX2z" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/solid.css"
+    integrity="sha384-wnAC7ln+XN0UKdcPvJvtqIH3jOjs9pnKnq9qX68ImXvOGz2JuFoEiCjT8jyZQX2z" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css"
+    integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
 <script src="pages/tecnica/skedtape.js"></script>
 <link rel=" stylesheet" href="pages/tecnica/skedtape.css">
-
 
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
@@ -816,17 +818,29 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         border: #fff;
 
     }
+
+    /* .sked-tape__time-frame {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    } */
 </style>
 
 <body>
     <input id="userAuth" type="text" value="<?php echo $user[user_id] ?>" hidden>
+    <div id="dateForm">
+
+        <label for="dataSelecionada">Selecione uma data:</label>
+        <input type="date" id="dataSelecionada">
+    </div>
     <div class="expanded-container">
         <div class="carousel" id="carousel"></div>
     </div>
     <!-- right offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title" id="offcanvasRightLabel">Recent Acitivity</h5>
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Detalhamento da Ordem de Serviço</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0 overflow-hidden">
@@ -834,135 +848,59 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                 <div class="acitivity-timeline p-4">
                     <div class="acitivity-item d-flex">
                         <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar">
+                            <img src="assets/images/users/avatar-1.jpg" alt=""
+                                class="avatar-xs rounded-circle acitivity-avatar">
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Oliver Phillips <span class="badge bg-soft-primary text-primary align-middle">New</span></h6>
-                            <p class="text-muted mb-2">We talked about a project on linkedin.</p>
-                            <small class="mb-0 text-muted">Today</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                            <div class="avatar-title bg-soft-success text-success rounded-circle">
-                                N
+                            <h6 id="numeroOS" class="mb-1"></h6>
+                            <p id="tipoTextContent" class="text-muted mb-2"></p>
+                            <p id="clienteTextContent" class="text-muted mb-2"></p>
+                            <p id="dataAberturaTextContent" class="text-muted mb-2"></p>
+                            <p id="observacoesTextContent" class="text-muted mb-2"></p>
+                            <p id="statusTextContent" class="text-muted mb-2"></p>
+                            <small id="solicitanteSmall" class="mb-0 text-muted"></small>
+                            <hr />
+                            <h6>Informações Adicionais:</h6>
+                            <ul id="ulElementId">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                            <hr />
+                            <h6>Progresso:</h6>
+                            <div class="progress mb-3" style="height: 7px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 75%;"
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Nancy Martino <span class="badge bg-soft-secondary text-secondary align-middle">In Progress</span></h6>
-                            <p class="text-muted mb-2"><i class="ri-file-text-line align-middle ms-2"></i> Create new project Buildng product</p>
-                            <div class="avatar-group mb-2">
-                                <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Christi">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle avatar-xs">
-                                </a>
-                                <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Frank Hook">
-                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle avatar-xs">
-                                </a>
-                                <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title=" Ruby">
-                                    <div class="avatar-xs">
-                                        <div class="avatar-title rounded-circle bg-light text-primary">
-                                            R
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="more">
-                                    <div class="avatar-xs">
-                                        <div class="avatar-title rounded-circle">
-                                            2+
-                                        </div>
-                                    </div>
-                                </a>
+                            <hr />
+                            <h6>Histórico:</h6>
+                            <ul class="timeline">
+                                <li><span>14/08/2023 11:20:04</span> Ordem de serviço criada por Gustavo Costa.</li>
+                                <li><span>14/08/2023 13:00:00</span> Técnico João Silva designado para a ordem de
+                                    serviço.</li>
+                                <li><span>14/08/2023 14:30:00</span> João Silva iniciou o serviço.</li>
+                                <!-- ... -->
+                            </ul>
+                            <hr />
+                            <h6>Ações:</h6>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-sm me-2">Iniciar Serviço</button>
+                                <button type="button" class="btn btn-success btn-sm me-2">Concluir Serviço</button>
+                                <button type="button" class="btn btn-danger btn-sm me-2">Cancelar Serviço</button>
                             </div>
-                            <small class="mb-0 text-muted">Yesterday</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar">
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Natasha Carey <span class="badge bg-soft-success text-success align-middle">Completed</span></h6>
-                            <p class="text-muted mb-2">Adding a new event with attachments</p>
-                            <div class="row border border-dashed gx-2 p-2 mb-2">
-                                <div class="col-4">
-                                    <img src="assets/images/small/img-2.jpg" alt="" class="img-fluid rounded" />
-                                </div>
-                                <div class="col-4">
-                                    <img src="assets/images/small/img-3.jpg" alt="" class="img-fluid rounded" />
-                                </div>
-                                <div class="col-4">
-                                    <img src="assets/images/small/img-4.jpg" alt="" class="img-fluid rounded" />
-                                </div>
-                            </div>
-                            <small class="mb-0 text-muted">25 Nov</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-6.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar">
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Bethany Johnson</h6>
-                            <p class="text-muted mb-2">added a new member to velzon dashboard</p>
-                            <small class="mb-0 text-muted">19 Nov</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0">
-                            <div class="avatar-xs acitivity-avatar">
-                                <div class="avatar-title rounded-circle bg-soft-danger text-danger">
-                                    <i class="ri-shopping-bag-line"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Your order is placed <span class="badge bg-soft-danger text-danger align-middle ms-1">Out of Delivery</span></h6>
-                            <p class="text-muted mb-2">These customers can rest assured their order has been placed.</p>
-                            <small class="mb-0 text-muted">16 Nov</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-7.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar">
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Lewis Pratt</h6>
-                            <p class="text-muted mb-2">They all have something to say beyond the words on the page. They can come across as casual or neutral, exotic or graphic. </p>
-                            <small class="mb-0 text-muted">22 Oct</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item py-3 d-flex">
-                        <div class="flex-shrink-0">
-                            <div class="avatar-xs acitivity-avatar">
-                                <div class="avatar-title rounded-circle bg-soft-info text-info">
-                                    <i class="ri-line-chart-line"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Monthly sales report</h6>
-                            <p class="text-muted mb-2"><span class="text-danger">2 days left</span> notification to submit the monthly sales report. <a href="javascript:void(0);" class="link-warning text-decoration-underline">Reports Builder</a></p>
-                            <small class="mb-0 text-muted">15 Oct</small>
-                        </div>
-                    </div>
-                    <div class="acitivity-item d-flex">
-                        <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-8.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar" />
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">New ticket received <span class="badge bg-soft-success text-success align-middle">Completed</span></h6>
-                            <p class="text-muted mb-2">User <span class="text-secondary">Erica245</span> submitted a ticket.</p>
-                            <small class="mb-0 text-muted">26 Aug</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="offcanvas-foorter border p-3 text-center">
-            <a href="javascript:void(0);" class="link-success">View All Acitivity <i class="ri-arrow-right-s-line align-middle ms-1"></i></a>
+        <div class="offcanvas-footer border p-3 text-center">
+            <a href="controle_os" class="">Ver Todas as Ordens de Serviço<i class=""></i></a>
         </div>
     </div>
     <br>
+
     <div class="teste">
 
         <!-- <div class="container mt-4 timeline-container"> -->
@@ -982,31 +920,39 @@ function gerarHoraInicio($OsPorTecnicoFunction)
     let locations = <?php echo $resultadoConsultaTecnicos; ?>;
     let events = <?php echo $resultadoConsultaOrdensDirecionadas; ?>
 
-
-
     var carouselContainer = document.getElementById("carousel");
 
-
-    window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', function () {
         const elements = document.querySelectorAll('.concluido, .deslocamento, .cancelado, .impedido, .atendimento, .descanso, .orcamento');
 
         const elementsBalons = document.querySelectorAll('.concluido, .deslocamento, .cancelado, .impedido, .atendimento, .descanso, .orcamento, .direcionado');
 
-        elements.forEach(function(elemento) {
-            elemento.addEventListener("click", function(event) {
+        elements.forEach(function (elemento) {
+            elemento.addEventListener("click", function (event) {
                 event.stopPropagation();
             });
         });
 
-        elementsBalons.forEach(function(elemento) {
-            elemento.addEventListener('mouseover', function(event) {
+        elementsBalons.forEach(function (elemento) {
+            elemento.addEventListener('mouseover', function (event) {
                 gerarBalao()
             });
         });
-        
-                const pageTotal = document.querySelector('.page-content')
 
-        pageTotal.addEventListener('click', function(event) {
+        const form = document.getElementById('dateForm');
+        const dateInput = document.getElementById('dataSelecionada');
+
+        dateInput.addEventListener('change', function () {
+            const selectedDate = dateInput.value;
+            console.log('data', selectedDate)
+            const urlDestino = `linha_do_tempo/${selectedDate}`;
+
+            window.location.href = urlDestino;
+        });
+
+        const pageTotal = document.querySelector('.page-content')
+
+        pageTotal.addEventListener('click', function (event) {
             if (event.target === pageTotal) {
                 if (selectedId) {
                     let ordem = null
@@ -1054,14 +1000,14 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             }
         });
 
-     
+
 
 
 
 
     });
 
-     osDirecionar.forEach(ordem => {
+    osDirecionar.forEach(ordem => {
         const card = document.createElement("div");
         card.classList.add("divCarrossel");
 
@@ -1181,7 +1127,6 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         return dataFormatada;
     }
 
-
     function obterInformacoes(ordem) {
         let opcoes = {
             year: 'numeric',
@@ -1206,9 +1151,9 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             } else if (ordem.os_status_nome === 'Cancelado') {
                 return new Date(ordem.chamado_hora_inicial_esperada).toLocaleDateString('pt-BR', opcoes);
             } else if (ordem.os_status_nome === 'Concluido') {
-                return new Date(ordem.chamado_hora_inicio).toLocaleDateString('pt-BR', opcoes) + ' - ' + new Date(ordem.chamado_hora_final).toLocaleDateString('pt-BR', opcoes);
+                return new Date(ordem.chamado_hora_inicio).toLocaleDateString('pt-BR', opcoes) + ' - ' + new Date(ordem.os_hora_final).toLocaleDateString('pt-BR', opcoes);
             } else if (ordem.os_status_nome === 'Orçamento') {
-                return new Date(ordem.chamado_hora_inicio).toLocaleDateString('pt-BR', opcoes) + ' - ' + new Date(ordem.chamado_hora_final).toLocaleDateString('pt-BR', opcoes);
+                return new Date(ordem.chamado_hora_inicio).toLocaleDateString('pt-BR', opcoes) + ' - ' + new Date(ordem.os_hora_final).toLocaleDateString('pt-BR', opcoes);
             } else if (ordem.os_status_nome === 'Impedido') {
                 return new Date(ordem.chamado_hora_inicial_esperada).toLocaleDateString('pt-BR', opcoes);
             }
@@ -1229,7 +1174,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         balloon.style.borderRadius = '10px';
         document.body.appendChild(balloon);
         let hideTimeout;
-        elements.forEach(function(element) {
+        elements.forEach(function (element) {
             element.addEventListener('mouseover', () => {
                 clearTimeout(hideTimeout);
                 balloon.style.display = 'block';
@@ -1239,7 +1184,6 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                     balloon.style.left = rect.left + window.scrollX + 'px';
                     const input = element.querySelector('.sked-tape__center input');
                     let value = input.value;
-                    // debugger
                     let cliente = null;
                     let tipoDeManutencao = null;
                     let horario = null;
@@ -1258,34 +1202,46 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                             endereco = events[index].evento_inicio;
                         }
                     }
-                    const icons = [{
-                            class: 'fas fa-user',
-                            label: cliente
-                        },
-                        {
-                            class: 'fas fa-wrench',
-                            label: tipoDeManutencao
-                        },
-                        {
-                            class: 'far fa-clock',
-                            label: horario
-                        },
-                        {
-                            class: 'fas fa-map-marker-alt',
-                            label: endereco
-                        },
-                       {
-                            class: 'fas fa-arrow-right',
-                            label: 'Detalhamento',
-                            isButton: true,
-                            isReturn: false
-                        },
+                    const classes = element.className.split(' ');
+                    let corresponde = false;
+                    classes.forEach(classe => {
+                        if (classe == 'direcionado') {
+                            corresponde = true;
+                        }
+                    });
+
+                    const conditionalItem =  corresponde ? [
                         {
                             class: 'fas fa-arrow-left',
                             label: 'Retornar',
                             isButton: true,
                             isReturn: true
                         }
+                    ] : [];
+
+                    const icons = [{
+                        class: 'fas fa-user',
+                        label: cliente
+                    },
+                    {
+                        class: 'fas fa-wrench',
+                        label: tipoDeManutencao
+                    },
+                    {
+                        class: 'far fa-clock',
+                        label: horario
+                    },
+                    {
+                        class: 'fas fa-map-marker-alt',
+                        label: endereco
+                    },
+                    {
+                        class: 'fas fa-arrow-right',
+                        label: 'Detalhamento',
+                        isButton: true,
+                        isReturn: false
+                    },
+                    ...conditionalItem
                     ];
                     icons.forEach(icon => {
                         let iconElement = balloon.querySelector(`i.${icon.class.split(' ').join('.')}`);
@@ -1309,14 +1265,16 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                                 labelElement.setAttribute('data-bs-target', '#offcanvasRight');
                                 labelElement.setAttribute('aria-controls', 'offcanvasRight');
                                 labelElement.setAttribute('class', 'btn btn-primary');
+                                labelElement.setAttribute('onclick', `testeoff(${value}, 2)`)
                                 // Adicione outras propriedades aqui, se necessário
                             }
-                            
-                              if (icon.isButton && icon.isReturn) {
+
+                            if (icon.isButton && icon.isReturn) {
                                 labelElement.setAttribute('class', 'btn btn-primary');
                                 labelElement.setAttribute('onclick', `retornarOs(${value})`)
                                 // Adicione outras propriedades aqui, se necessário
                             }
+
                             const containerElement = document.createElement('div');
                             containerElement.style.display = 'flex';
                             containerElement.style.alignItems = 'center';
@@ -1352,7 +1310,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
     }
 
     function direcionar(event) {
-
+        console.log('hshshshs', event)
         // alert(event.start)
         const event_id = event.userData.id_os; // exemplo
         const os_id = event.userData.os_id;
@@ -1378,13 +1336,13 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         console.log('data', data)
 
         fetch(`direcionar_os/${event.userData.id_os}`, {
-                method: 'POST', // ou 'PUT'
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(function(response) {
+            method: 'POST', // ou 'PUT'
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(function (response) {
                 console.log('este aqui', response)
                 if (response.ok) {
                     return response.text();
@@ -1392,11 +1350,11 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                     throw new Error('Erro na requisição: ' + response.status);
                 }
             })
-            .then(function(data) {
+            .then(function (data) {
                 // Tratar a resposta do PHP, se necessário
                 console.log(data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 // Tratar qualquer erro ocorrido durante a requisição
                 console.log('Erro: ' + error.message);
             });
@@ -1404,8 +1362,8 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         alert(`O.S Direcionada para o técnico ${event.userData.locations[event.location - 1].name}`)
         location.reload();
     }
-    
-        function retornarOs(id) {
+
+    function retornarOs(id) {
 
         let ordermRetornar = null
 
@@ -1422,30 +1380,30 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         };
 
         fetch(`retornar_os`, {
-                method: 'POST', // ou 'PUT'
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(function(response) {
+            method: 'POST', // ou 'PUT'
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(function (response) {
                 if (response.ok) {
                     return response.text();
                 } else {
                     throw new Error('Erro na requisição: ' + response.status);
                 }
             })
-            .then(function(data) {
+            .then(function (data) {
                 console.log(data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log('Erro: ' + error.message);
             });
 
         location.reload();
     }
-    
-        function testeoff(idOs, type) {
+
+    function testeoff(idOs, type) {
 
         if (type == 1) {
             let os = null
@@ -1464,7 +1422,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             const solicitanteSmall = document.getElementById('solicitanteSmall')
             const numeroOS = document.getElementById('numeroOS')
 
-            tipoTextContent.textContent = `Tipo: ${ os.os_tipo_nome}`
+            tipoTextContent.textContent = `Tipo: ${os.os_tipo_nome}`
             clienteTextContent.textContent = `Cliente: ${os.cliente_fantasia}`
             dataAberturaTextContent.textContent = `Data de Abertura: ${os.os_data_abertura}`
             observacoesTextContent.textContent = `Considerações: ${os.os_consideracoes}`
@@ -1507,7 +1465,7 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             const solicitanteSmall = document.getElementById('solicitanteSmall')
             const numeroOS = document.getElementById('numeroOS')
 
-            tipoTextContent.textContent = `Tipo: ${ ordem.os_tipo_nome || ordem.nome_evento}`
+            tipoTextContent.textContent = `Tipo: ${ordem.os_tipo_nome || ordem.nome_evento}`
             clienteTextContent.textContent = `Cliente: ${ordem.cliente_fantasia || 'Evento Técnico'}`
             dataAberturaTextContent.textContent = `Data de Abertura: ${ordem.chamado_data_os || ordem.evento_data_referencia}`
             observacoesTextContent.textContent = `Considerações: ${ordem.chamado_observacoes || 'Evento Técnico'}`
@@ -1522,8 +1480,8 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                 `Tempo estimado para conclusão: ${ordem.os_tipos_tempo + 'minutos' || "Evento Técnico"}`,
                 `Previsão de início: ${ordem.chamado_hora_inicial_esperada || 'Evento Técnico'}`,
                 `Previsão de término: ${ordem.chamado_hora_inicial_esperada
-    ? addMinutesToDatetime(ordem.chamado_hora_inicial_esperada, ordem.os_tipos_tempo) || 'Evento Técnico'
-    : 'Evento Técnico'}`,
+                    ? addMinutesToDatetime(ordem.chamado_hora_inicial_esperada, ordem.os_tipos_tempo) || 'Evento Técnico'
+                    : 'Evento Técnico'}`,
                 `Hora de início real: ${ordem.chamado_hora_inicio || ordem.evento_inicio || 'Não Iniciada'}`,
                 `Hora de término real: ${ordem.chamado_hora_final || ordem.evento_fim || 'Não Iniciada'}`
             ];
@@ -1535,6 +1493,22 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             });
         }
 
+    }
+
+    function addMinutesToDatetime(datetimeString, minutes) {
+        const datetime = new Date(datetimeString);
+        datetime.setTime(datetime.getTime() + minutes * 60 * 1000);
+
+        const year = datetime.getFullYear();
+        const month = String(datetime.getMonth() + 1).padStart(2, '0');
+        const day = String(datetime.getDate()).padStart(2, '0');
+        const hours = String(datetime.getHours()).padStart(2, '0');
+        const minutesFormatted = String(datetime.getMinutes()).padStart(2, '0');
+        const seconds = String(datetime.getSeconds()).padStart(2, '0');
+        const milliseconds = String(datetime.getMilliseconds()).padStart(3, '0');
+
+        const newDatetimeString = `${year}-${month}-${day} ${hours}:${minutesFormatted}:${seconds}.${milliseconds}`;
+        return newDatetimeString;
     }
 
     function mountUserDataFunction(idOs) {
@@ -1582,12 +1556,10 @@ function gerarHoraInicio($OsPorTecnicoFunction)
         timeIndicatorSerifs: true,
         showIntermission: true,
         formatters: {
-            date: function(date) {
-                // console.log('teste',$.fn.skedTape.format.date(date, 'l', '/'))
-      
+            date: function (date) {
                 return $.fn.skedTape.format.date(date, 'l', '/');
             },
-            duration: function(ms, opts) {
+            duration: function (ms, opts) {
                 return $.fn.skedTape.format.duration(ms, {
                     hrs: 'ч.',
                     min: 'мин.'
@@ -1595,34 +1567,30 @@ function gerarHoraInicio($OsPorTecnicoFunction)
             },
         },
 
-        postRenderLocation: function($el, location, canAdd) {
+        postRenderLocation: function ($el, location, canAdd) {
             this.constructor.prototype.postRenderLocation($el, location, canAdd);
             // $el.prepend('<img src="https://s3.amazonaws.com/attachments.fieldcontrol.com.br/accounts/6118/employees/9271b714-c5cb-4f75-bdd0-abc71276dfd0/518e.83c14040f.png?id=1bf9.cb7bee33a" alt="Imagem" class="icone"/>');
         }
     });
-    $sked1.on('event:dragEnded.skedtape', function(e) {
+    $sked1.on('event:dragEnded.skedtape', function (e) {
         var event = e.detail.event;
         var startTime = converterData(event.start);
         event.status = true
         var current = new Date()
         var currentTime = converterData(current)
         if (startTime < currentTime) {
-            console.log('oiioioi')
             event.start = new Date();
             $sked1.skedTape('updateEvent', event);
         }
-        console.log('event', event.start)
         event.start = converterData(event.start);
-  
         direcionar(event)
     });
-    $sked1.on('event:click.skedtape', function(e) {
+    $sked1.on('event:click.skedtape', function (e) {
         $sked1.skedTape('removeEvent', e.detail.event.id);
     });
-    $sked1.on('timeline:click.skedtape', function(e, api) {
+    $sked1.on('timeline:click.skedtape', function (e, api) {
         try {
             if (selectedId) {
-       
                 var startTime = e.detail.time;
                 var currentTime = new Date();
                 if (startTime < currentTime) {
@@ -1633,11 +1601,11 @@ function gerarHoraInicio($OsPorTecnicoFunction)
                     name: 'New meeting ' + selectedId,
                     id: selectedId,
                     start: startTime,
-                    duration: parseInt(mountUserData.duration, 10) * 60 * 1000, 
+                    duration: parseInt(mountUserData.duration, 10) * 60 * 1000,
                     started: false,
                     className: 'deslocamento-event',
                     userData: mountUserData,
-                }); 
+                });
                 document.getElementById(selectedId).classList.remove('pulse');
                 selectedId = null;
             }
