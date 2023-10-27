@@ -1,0 +1,34 @@
+<?php
+//cCODIGO DA SESSION
+if (!empty($_SESSION['user_id'])) {
+} else {
+    $_SESSION['msg'] = "Área restrita";
+    header("Location: ../../login.php");
+}
+
+
+$conn->query($insert = "INSERT INTO os (os_tipo,os_cliente,os_usuario,os_consideracoes)
+VALUES ('$_POST[tipo]','$_POST[cliente]','$idusers','$_POST[consideracoes]')");
+
+
+	//$ultimo_id = $conn->insert_id;
+echo $insert;
+
+?><br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
+<br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
+<br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
+<br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
+<br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
+<br>
+<br><br><br>sas<br><br><br><br><br><br>
+sas
