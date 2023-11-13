@@ -5,7 +5,7 @@
 <title>Tirar Fotos</title>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <style>
-        video { border: 1px solid #ccc; display: block; margin: 0 0 20px 0; }
+        video { border: 1px solid #ccc; display: block; margin: 0s 0 20px 0; }
         #canvas { margin-top: 20px; border: 1px solid #ccc; display: block; }
 </style>
 </head>
@@ -16,6 +16,7 @@
 <canvas id="canvas" width="640" height="480"></canvas>
 	
 	<Script>
+        // TESTEs
 	// Grab elements, create settings, etc.
 var video = document.getElementById('video');
 
