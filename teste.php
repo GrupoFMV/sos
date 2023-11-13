@@ -16,7 +16,7 @@
 <canvas id="canvas" width="640" height="480"></canvas>
 	
 	<Script>
-	
+	// teste;
 	// Grab elements, create settings, etc.
 var video = document.getElementById('video');
 
