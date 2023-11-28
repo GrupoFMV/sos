@@ -1892,21 +1892,71 @@ while ($linhachi = mysqli_fetch_array($resultadochi)) { ?>
 
         <form action="inserir_os" method="POST">
        
-        <label>Tipo OS</label>
-    
-
+<div class="row">
+<div class="col-12">
+<label>Tipo OS</label>
 <select name="tipo" id="cliente-select" required class="form-control meuselect">
-<option value="">Informe</option>
-    <?php
-$sqlt = "SELECT * FROM os_tipos WHERE os_tipo_status ='1'  ORDER BY os_tipo_nome";
+<option value="">Informe</option> 
+<?php $sqlt = "SELECT * FROM os_tipos WHERE os_tipo_status ='1'  ORDER BY os_tipo_nome";
 $resultadot = mysqli_query($conn, $sqlt);
 while ($linhat = mysqli_fetch_array($resultadot)) { ?>
-    <option value="<?php echo $linhat[os_tipo_id] ?>"><?php echo $linhat[os_tipo_nome] ?></option>
+<option value="<?php echo $linhat[os_tipo_id] ?>"><?php echo $linhat[os_tipo_nome] ?></option>
+<?php } ?>
+</select>
+</div>
+
+<div class="col-12">
+<label>Nome do Solicitante</label>
+<input class="form-control" name="solicitante" required></textarea>
+</div>
+
+<div class="col-6">
+<label>Elevador está parado?</label><br>
+<input type="radio" id="nao" name="parado" value="Não"  />
+<label for="nao">Não</label>
+<input type="radio" id="sim" name="parado" value="Sim"  />
+<label for="sim">Sim</label> <br>
+</div>
+
+<div class="col-6">
+<label>Passageiro Preso?</label><br>
+<input type="radio" id="nao2" name="preso" value="Não"  />
+<label for="nao2">Não</label>
+<input type="radio" id="sim2" name="preso" value="Sim"  />
+<label for="sim2">Sim</label> <br>
+</div>
+
+</div>
+
+
+       
+    
+
+
+
+
+
+
+<label>Equipamento</label>
+
+<select name="equipamento" id="cliente-select"  class="form-control meuselect">
+<option value="">Não informar</option>
+    <?php
+$sqlt = "SELECT * FROM equipamentos e 
+INNER JOIN modelos m ON e.equipamento_modelo = m.modelo_id
+INNER JOIN marcas ma ON e.equipamento_id_marca = ma.marca_id
+
+WHERE equipamento_status ='1' and equipamento_id_cliente = $id ";
+$resultadot = mysqli_query($conn, $sqlt);
+while ($linhat = mysqli_fetch_array($resultadot)) { ?>
+    <option value="<?php echo $linhat[equipamento_id] ?>"> <?php echo $linhat[equipamento_nome] ?> - <?php echo $linhat[marca_nome] ?> - <?php echo $linhat[modelo_nome ] ?></option>
     <?php } ?>
 </select>
-<label>Nome do Solicitante</label>
-   
-   <input class="form-control" name="solicitante" required></textarea>
+
+<label>Tipo Acesso</label>
+<input class="form-control" name="solicitante" required></textarea>
+
+<label></label>
 
         <label>Informações Adicionais </label>
    
