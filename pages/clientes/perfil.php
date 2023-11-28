@@ -58,8 +58,8 @@ $cliente = mysqli_fetch_array($clientes);
                                 <div class="row text text-white-50 text-center">
                                     <div class="col-lg-12 col-4">
                                         <div class="p-2">
-                                        <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalemergencia"> <i
-                                                class="ri-edit-box-line align-bottom"></i> Emergência</a>
+                                        <label for="formFile" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"> + Cadastrar Nova OS</label>
+    
                                             
                                         </div>
                                     </div>
@@ -1615,7 +1615,6 @@ while ($linhachi = mysqli_fetch_array($resultadochi)) { ?>
                                                     <h5 class="card-title flex-grow-1 mb-0">Chamados</h5>
                                                     <div class="flex-shrink-0">
                                                       
-                                                        <label for="formFile" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"> + Cadastrar Nova OS</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -1929,14 +1928,6 @@ while ($linhat = mysqli_fetch_array($resultadot)) { ?>
 </div>
 
 
-       
-    
-
-
-
-
-
-
 <label>Equipamento</label>
 
 <select name="equipamento" id="cliente-select"  class="form-control meuselect">
@@ -1954,7 +1945,7 @@ while ($linhat = mysqli_fetch_array($resultadot)) { ?>
 </select>
 
 <label>Tipo Acesso</label>
-<input class="form-control" name="solicitante" required></textarea>
+<input class="form-control" name="acesso" required></textarea>
 
 <label></label>
 
