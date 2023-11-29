@@ -41,6 +41,6 @@ if($_POST[tipo] == '4') {
 
 <script>
 alert("OS Aberta com sucesso!");
-//window.location.href = "tela_cliente/<?php echo $_POST[cliente] ?> ";
+window.location.href = "tela_cliente/<?php echo $_POST[cliente] ?> ";
 
 </script>

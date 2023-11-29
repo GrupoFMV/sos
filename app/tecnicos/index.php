@@ -27,7 +27,7 @@ error_reporting(0);
 
 <head>
 
-<base href="http://localhost/SOSElevadores/app/tecnicos/" />
+<base href="http://localhost/sos_git/sos/app/tecnicos/" />
 
     <!-- Required meta tags -->
     <meta charset="utf-8">

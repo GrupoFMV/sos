@@ -71,11 +71,13 @@ $orcamento = mysqli_fetch_array($exeor);
                   <table class="table table-borderless align-middle mb-0">
                                                                 <thead class="table-light">
                                                                     <tr>
+                                                                    <th scope="col">QTD</th>
                                                                         <th scope="col">Item</th>
                                                                         <th scope="col">Estoque</th>
-                                                                        <th scope="col">Fornecedores</th>
-                                                                        <th scope="col">Valor Compra</th>
+                                                                       
                                                                         <th scope="col">Valor Venda</th>
+                                                                        <th scope="col">Desconto</th>
+                                                                        <th scope="col"></th>
                                                                         
                                                                     </tr>
                                                                 </thead>
@@ -89,20 +91,24 @@ $valorvenda += $orcamento[produto_valor_venda];
 $valorcompra += $orcamento[produto_valor_compra];
 
   ?>
+   <form action="atualizar_produto_orcamento" method="post">
  <tr>
+ 
+<td style="width:80px"> <input type="number" min="1" class="form-control" value="<?php echo $orcamento[produto_or_qtd] ?>" name="qtd"> </td>
  <td><?php echo $orcamento[produto_nome] ?></td>
  <td><?php echo $orcamento[produto_estoque] ?></td>
- <td></td>
- <td>R$<?php echo $orcamento[produto_valor_compra] ?></td>
+ 
  <td>R$<?php echo $orcamento[produto_valor_venda] ?></td>
-
+ <td style="width:200px"><input type="text"  class="form-control" name="desconto" value=""> </td>
+ <td> <button type="submit">Atualizar</button></td>
  </tr>
+</form>
   <?php } ?>
 
 </table>
                   <br>
-Valor total do compra: R$ <?php echo $valorcompra ?><br>
-Valor total do venda: R$ <?php echo $valorvenda ?>
+
+Valor total do orçamento: R$ <?php echo $valorvenda ?>
             
               <br> <br><br>
 <div class="row"> 
@@ -154,3 +160,10 @@ Valor total do venda: R$ <?php echo $valorvenda ?>
 </div>
 </div>
 </div>
+
+<?php
+/// ATUALIZANDO ORÇAMENTO
+
+@$conn->query($teste = "update orcamentos set valor_original ='$valorvenda'                             
+where orcamento_os = '$id' ");
+
